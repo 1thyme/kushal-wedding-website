@@ -77,6 +77,16 @@ export default function PhotoGallery() {
   const [isUploading, setIsUploading] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsUploading(true);
+    // Here you would handle the actual form submission
+    setTimeout(() => {
+      setIsUploading(false);
+      setShowUploadModal(false);
+    }, 2000);
+  };
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
     // Here you would implement the actual upload logic
     // For now, we'll just simulate it
@@ -164,7 +174,7 @@ export default function PhotoGallery() {
         </div>
 
         {/* Photo Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[200px]">
           <AnimatePresence>
             {filteredImages.map((image) => (
               <motion.div
@@ -216,6 +226,41 @@ export default function PhotoGallery() {
                   <XMarkIcon className="h-6 w-6" />
                 </button>
               </div>
+
+              <form className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Your Name (optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={uploadFormData.name}
+                    onChange={(e) =>
+                      setUploadFormData({ ...uploadFormData, name: e.target.value })
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Event
+                  </label>
+                  <select
+                    value={uploadFormData.event}
+                    onChange={(e) =>
+                      setUploadFormData({ ...uploadFormData, event: e.target.value })
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  >
+                    {Object.entries(weddingData.events).map(([key, event]) => (
+                      <option key={key} value={key}>
+                        {event.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                </form>
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div

@@ -18,7 +18,7 @@ export default function Home() {
       <LandingHero />
 
       {/* Events Section */}
-      <section id="events" className="py-20 px-4 sm:px-6 lg:px-8 bg-pink-50 dark:bg-navy-900">
+      <section id="events" className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-light text-center mb-12 text-navy-800 dark:text-pink-100">
             Wedding Events
@@ -45,13 +45,14 @@ export default function Home() {
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image
-            src="/gallery/landing-page/background-2.jpg"
+            src="/gallery/background/download.jpeg"
             alt="Contact Background"
             fill
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-black/60" />
+          {/* <div className="absolute inset-0 bg-black/60" /> */}
+          <div/>
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto text-center">
@@ -60,15 +61,15 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl font-light mb-6 text-white">
+            <h2 className="text-4xl font-dark mb-6 text-navy-800 dark:text-pink-100">
               Contact Information
             </h2>
             
             <div className="mb-12 text-center">
-              <p className="text-xl text-white/90 mb-6 leading-relaxed">
+              <p className="text-xl text-navy-800 dark:text-pink-100/90 mb-6 leading-relaxed">
                 We cordially invite you to join us in celebrating this beautiful union. Your presence will make our special day even more memorable. We look forward to sharing our joy with you and creating cherished memories together.
               </p>
-              <p className="text-lg text-rose-300 italic">
+              <p className="text-lg text-rose-700 italic">
                 "A wedding is not just the celebration of love, it's the coming together of families and friends."
               </p>
             </div>
@@ -80,14 +81,14 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.2 }}
-                  className="p-6 bg-white/10 backdrop-blur-md rounded-xl"
+                  className="p-6 bg-pink-800/10 backdrop-blur-md rounded-xl"
                 >
-                  <h3 className="text-xl font-medium mb-2 text-white">
+                  <h3 className="text-xl font-medium mb-2 text-navy-800 dark:text-pink-100">
                     {contact.name}
                   </h3>
-                  <p className="text-white/90 mb-1">{contact.role}</p>
-                  <p className="text-white/90 mb-1">{contact.phone}</p>
-                  <p className="text-white/90">{contact.email}</p>
+                  <p className="text-navy-800 dark:text-pink-100 mb-1">{contact.role}</p>
+                  <p className="text-navy-800 dark:text-pink-100 mb-1">{contact.phone}</p>
+                  <p className="text-navy-800 dark:text-pink-100">{contact.email}</p>
                 </motion.div>
               ))}
             </div>
@@ -100,7 +101,7 @@ export default function Home() {
                 transition={{ delay: 0.4 }}
                 className="mt-12"
               >
-                <h3 className="text-xl font-light mb-4 text-white">
+                <h3 className="text-xl font-light mb-4 text-navy-800 dark:text-pink-100">
                   Join our WhatsApp Group
                 </h3>
                 <div className="inline-block p-4 bg-white/10 backdrop-blur-md rounded-xl">

@@ -60,7 +60,7 @@ export default function LandingHero() {
             animate={{ scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <h1 className="text-5xl md:text-7xl font-light mb-4 text-white drop-shadow-lg">
+            <h1 className="text-4xl md:text-6xl font-light mb-4 text-white drop-shadow-lg">
               {weddingData.brideFirstName} & {weddingData.groomFirstName}
             </h1>
             <p className="text-2xl md:text-3xl font-light text-white/90 drop-shadow-md">
