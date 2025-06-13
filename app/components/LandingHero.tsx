@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { format, intervalToDuration } from 'date-fns';
 import { weddingData } from '../config/weddingData';
+import { backgroundImages } from '../config/backgroundImages';
 import Image from 'next/image';
 
 const calculateTimeLeft = (targetDate: string) => {
@@ -25,6 +26,7 @@ const calculateTimeLeft = (targetDate: string) => {
 
 export default function LandingHero() {
   const [timeLeft, setTimeLeft] = useState(() => calculateTimeLeft(weddingData.weddingDate));
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -34,31 +36,51 @@ export default function LandingHero() {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    // Check if dark mode is enabled
+    const isDark = document.documentElement.classList.contains('dark');
+    setIsDarkMode(isDark);
+
+    // Listen for theme changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          setIsDarkMode(document.documentElement.classList.contains('dark'));
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="relative min-h-screen">
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
-          src="/gallery/landing-page/17382404657605-1929339350.png"
-          alt="Wedding Couple"
+          src={isDarkMode ? backgroundImages.hero.dark : backgroundImages.hero.light}
+          alt="Wedding Background"
           fill
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-black/40" /> {/* Overlay for better text visibility */}
+        <div className="absolute inset-0 bg-black/40 dark:bg-black/60" />
       </div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
         className="relative min-h-screen flex flex-col items-center justify-center p-4 text-white z-10"
       >
         <div className="text-center space-y-8 backdrop-blur-sm bg-black/20 p-8 rounded-xl">
           <motion.div
             initial={{ scale: 0.9 }}
             animate={{ scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
           >
             <h1 className="text-4xl md:text-6xl font-light mb-4 text-white drop-shadow-lg">
               {weddingData.brideFirstName} & {weddingData.groomFirstName}
@@ -77,7 +99,6 @@ export default function LandingHero() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
               className="grid grid-cols-4 gap-4 text-center max-w-lg mx-auto"
             >
               <div className="bg-white/10 backdrop-blur-md p-4 rounded-lg shadow-lg">
@@ -102,14 +123,13 @@ export default function LandingHero() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
             className="mt-8"
           >
             <button
               onClick={() =>
                 document.getElementById("events")?.scrollIntoView({ behavior: "smooth" })
               }
-              className="bg-rose-500 text-white px-8 py-3 rounded-full hover:bg-rose-600 transition-colors duration-300 shadow-lg hover:shadow-xl"
+              className="bg-rose-500 text-white px-8 py-3 rounded-full hover:bg-rose-600 shadow-lg hover:shadow-xl"
             >
               View Events
             </button>

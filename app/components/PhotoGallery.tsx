@@ -1,11 +1,12 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CloudArrowUpIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import { weddingData } from '../config/weddingData';
+import { backgroundImages } from '../config/backgroundImages';
 
 interface UploadFormData {
   name: string;
@@ -76,6 +77,29 @@ export default function PhotoGallery() {
   });
   const [isUploading, setIsUploading] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    // Check if dark mode is enabled
+    const isDark = document.documentElement.classList.contains('dark');
+    setIsDarkMode(isDark);
+
+    // Listen for theme changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          setIsDarkMode(document.documentElement.classList.contains('dark'));
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -113,20 +137,31 @@ export default function PhotoGallery() {
     ? galleryImages
     : galleryImages.filter(img => img.category === selectedCategory);
 
-
   return (
-    <div className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-navy-900">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-light text-gray-800 dark:text-white">
+    <div className="relative py-20 px-4 sm:px-6 lg:px-8">
+      {/* Background Image */}
+      <div className="absolute inset-0">
+        <Image
+          src={isDarkMode ? backgroundImages.gallery.dark : backgroundImages.gallery.light}
+          alt="Gallery Background"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-black/40 dark:bg-black/60" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="flex justify-center items-center mb-8">
+          <h2 className="text-3xl font-light text-center mb-12 text-navy-800 dark:text-pink-100">
             Photo Gallery
           </h2>
-          <button
+          {/* <button
             onClick={() => setShowUploadModal(true)}
-            className="bg-rose-500 text-white px-4 py-2 rounded-lg hover:bg-rose-600 transition-colors dark:bg-rose-600 dark:hover:bg-rose-700"
+            className="bg-rose-500 text-white px-4 py-2 rounded-lg hover:bg-rose-600 dark:bg-rose-600 dark:hover:bg-rose-700"
           >
             Upload Photos Clicked By You :)
-          </button>
+          </button> */}
         </div>
 
         {/* Event Filter */}
@@ -156,8 +191,8 @@ export default function PhotoGallery() {
           ))}
         </div> */}
 
-                {/* Category Filter */}
-                <div className="mb-8 flex gap-2 overflow-x-auto pb-2">
+        {/* Category Filter */}
+        <div className="mb-8 flex gap-2 overflow-x-auto pb-2">
           {categories.map((category) => (
             <button
               key={category}
@@ -191,7 +226,7 @@ export default function PhotoGallery() {
                   src={image.src}
                   alt={image.alt}
                   fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  className="object-cover"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
                 <motion.div
@@ -202,12 +237,23 @@ export default function PhotoGallery() {
                   }}
                   className="absolute inset-0 bg-gradient-to-t from-navy-900/80 to-transparent flex items-end p-4 group dark:from-black/90"
                 >
-                  <p className="text-white text-lg font-light transform transition-transform group-hover:translate-y-0">{image.alt}</p>
+                  <p className="text-white text-lg font-light transform group-hover:translate-y-0">{image.alt}</p>
                 </motion.div>
               </motion.div>
             ))}
           </AnimatePresence>
         </div>
+
+        {/* <div className="mb-8 flex gap-2 overflow-x-auto pb-2"> */}
+        <div className="flex gap-8 overflow-x-auto pb-2  z-10 justify-center items-center mb-8">
+          <button
+            onClick={() => setShowUploadModal(true)}
+            className="bg-rose-500 text-white px-4 py-2 rounded-lg hover:bg-rose-600 dark:bg-rose-600 dark:hover:bg-rose-700"
+          >
+            Upload Photos Clicked By You :)
+          </button>
+        </div>
+        {/* </div> */}
 
         {/* Upload Modal */}
         {showUploadModal && (
@@ -260,7 +306,7 @@ export default function PhotoGallery() {
                     ))}
                   </select>
                 </div>
-                </form>
+              </form>
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div
